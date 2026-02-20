@@ -124,9 +124,9 @@ Discover Benefits for education,healthcare,housing, and more!
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <img
-                src={`${process.env.PUBLIC_URL || ''}/hero-phone.png`}
+                src={`${process.env.PUBLIC_URL || ''}/landing-image.png`}
                 alt="Family discovering government schemes together"
-                className="rounded-2xl shadow-2xl w-full max-w-[220px] md:max-w-[300px] lg:max-w-[360px]"
+                className="rounded-2xl shadow-2xl w-full max-w-[260px] md:max-w-[340px] lg:max-w-[420px]"
               />
             </motion.div>
           </div>
