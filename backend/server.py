@@ -25,12 +25,15 @@ JWT_ALGORITHM = 'HS256'
 
 app = FastAPI()
 
+import os
+
+frontend_url = os.environ.get("FRONTEND_URL")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
-        "https://schemafinder-la53wur2w-shockingyashs-projects.vercel.app",
-        "https://schemafinder-p0f88xpbx-shockingyashs-projects.vercel.app/"
+        frontend_url,
+        "http://localhost:3000"
     ],
     allow_credentials=True,
     allow_methods=["*"],
