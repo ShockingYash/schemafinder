@@ -24,6 +24,18 @@ JWT_SECRET = os.environ.get('JWT_SECRET', 'your-secret-key-change-in-production'
 JWT_ALGORITHM = 'HS256'
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "https://schemafinder-la53wur2w-shockingyashs-projects.vercel.app"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 api_router = APIRouter(prefix="/api")
 security = HTTPBearer()
 
@@ -321,16 +333,6 @@ async def unsave_scheme(scheme_id: str, user: dict = Depends(get_current_user)):
 
 app.include_router(api_router)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://schemafinder-la53wur2w-shockingyashs-projects.vercel.app/",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 logging.basicConfig(
     level=logging.INFO,
