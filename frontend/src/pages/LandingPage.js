@@ -1,48 +1,80 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, CheckCircle, FileText, Shield, Users } from "lucide-react";
+import { ArrowRight, CheckCircle, FileText, Shield, UserCircle2, Users } from "lucide-react";
 import { motion } from "framer-motion";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem('token');
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen">
       <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-          <div className="flex justify-between items-center h-16">
-            <h2 className="text-2xl font-bold text-[#1e3a8a]">Jan-Seva</h2>
-            <div className="flex gap-4">
+          <div className="py-3 md:py-0 md:h-16 flex flex-col gap-3 md:flex-row md:justify-between md:items-center">
+            <h2 className="text-xl leading-tight md:text-2xl font-bold text-[#1e3a8a]">Jan-Seva - A YojanaSetu Platform</h2>
+            <div className="flex items-center gap-2 md:gap-4 flex-wrap md:flex-nowrap">
               {isLoggedIn ? (
                 <>
                   <button
                     data-testid="nav-saved-btn"
                     onClick={() => navigate('/saved')}
-                    className="text-[#1e3a8a] hover:bg-blue-50 hover:text-[#172554] px-4 py-2 rounded-lg transition-colors"
+                    className="text-[#1e3a8a] hover:bg-blue-50 hover:text-[#172554] px-3 md:px-4 py-2 rounded-lg transition-colors text-sm md:text-base"
                   >
                     Saved Schemes
                   </button>
                   <button
                     data-testid="nav-quiz-btn"
                     onClick={() => navigate('/quiz')}
-                    className="bg-[#ea580c] hover:bg-[#c2410c] text-white font-medium px-6 py-2 rounded-full transition-all shadow-md hover:shadow-lg"
+                    className="bg-[#ea580c] hover:bg-[#c2410c] text-white font-medium px-4 md:px-6 py-2 rounded-full transition-all shadow-md hover:shadow-lg text-sm md:text-base"
                   >
                     Start Quiz
                   </button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        data-testid="nav-profile-btn"
+                        className="h-10 w-10 inline-flex items-center justify-center rounded-full border border-slate-200 bg-white text-[#1e3a8a] hover:bg-blue-50 transition-colors"
+                        aria-label="Profile"
+                        type="button"
+                      >
+                        <UserCircle2 size={22} />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-44">
+                      <DropdownMenuItem onClick={() => navigate("/saved")}>
+                        Saved Schemes
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout}>
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </>
               ) : (
                 <>
                   <button
                     data-testid="nav-login-btn"
                     onClick={() => navigate('/login')}
-                    className="text-[#1e3a8a] hover:bg-blue-50 px-4 py-2 rounded-lg transition-colors"
+                    className="text-[#1e3a8a] hover:bg-blue-50 px-3 md:px-4 py-2 rounded-lg transition-colors text-sm md:text-base"
                   >
                     Login
                   </button>
                   <button
                     data-testid="nav-signup-btn"
                     onClick={() => navigate('/signup')}
-                    className="bg-[#ea580c] hover:bg-[#c2410c] text-white px-6 py-2 rounded-full transition-all shadow-md"
+                    className="bg-[#ea580c] hover:bg-[#c2410c] text-white px-4 md:px-6 py-2 rounded-full transition-all shadow-md text-sm md:text-base"
                   >
                     Sign Up
                   </button>
@@ -53,7 +85,7 @@ const LandingPage = () => {
         </div>
       </nav>
 
-      <section className="hero-gradient py-20 md:py-32">
+      <section className="hero-gradient py-10 md:py-16">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             <motion.div 
@@ -63,10 +95,10 @@ const LandingPage = () => {
               transition={{ duration: 0.6 }}
             >
               <h1 className="text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight text-[#0f172a] mb-6">
-                Find Government Schemes Made for You
+                Easily Find Government Schemes You're Eligible For
               </h1>
               <p className="text-lg leading-relaxed text-[#475569] mb-8">
-                Answer 10 simple questions and discover government benefits you're eligible for. From education to housing, healthcare to pensions.
+Discover Benefits for education,healthcare,housing, and more!
               </p>
               <div className="flex flex-wrap gap-4">
                 <button
@@ -86,36 +118,36 @@ const LandingPage = () => {
               </div>
             </motion.div>
             <motion.div 
-              className="md:col-span-5"
+              className="md:col-span-5 flex justify-center"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <img
-                src="https://images.unsplash.com/flagged/photo-1579503429289-6de86c9fc2de?crop=entropy&cs=srgb&fm=jpg&q=85"
-                alt="Diverse Indian citizens"
-                className="rounded-2xl shadow-2xl w-full"
+                src={`${process.env.PUBLIC_URL || ''}/hero-phone.png`}
+                alt="Family discovering government schemes together"
+                className="rounded-2xl shadow-2xl w-full max-w-[220px] md:max-w-[300px] lg:max-w-[360px]"
               />
             </motion.div>
           </div>
         </div>
       </section>
 
-      <section id="features" className="py-20 bg-white">
+      <section id="features" className="py-10 bg-white">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl tracking-tight text-[#0f172a] mb-4">How It Works</h2>
+          <div className="text-center mb-6">
+            <h2 className="text-3xl md:text-4xl tracking-tight text-[#0f172a] mb-2">How It Works</h2>
             <p className="text-lg text-[#475569]">Simple, fast, and accurate</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <motion.div 
-              className="text-center p-6"
+              className="text-center p-5"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <FileText className="text-[#1e3a8a]" size={32} />
               </div>
               <h3 className="text-2xl font-medium text-[#0f172a] mb-2">Answer Quiz</h3>
@@ -123,13 +155,13 @@ const LandingPage = () => {
             </motion.div>
 
             <motion.div 
-              className="text-center p-6"
+              className="text-center p-5"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Shield className="text-[#ea580c]" size={32} />
               </div>
               <h3 className="text-2xl font-medium text-[#0f172a] mb-2">Get Results</h3>
@@ -137,13 +169,13 @@ const LandingPage = () => {
             </motion.div>
 
             <motion.div 
-              className="text-center p-6"
+              className="text-center p-5"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <CheckCircle className="text-[#059669]" size={32} />
               </div>
               <h3 className="text-2xl font-medium text-[#0f172a] mb-2">Apply Now</h3>
@@ -204,3 +236,5 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
+

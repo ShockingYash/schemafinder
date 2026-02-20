@@ -20,15 +20,36 @@ function App() {
     }
   }, [token]);
 
+  // Remove Emergent badge if present (e.g. injected by external script)
+  useEffect(() => {
+    const removeBadge = () => {
+      const badge = document.getElementById('emergent-badge');
+      if (badge) {
+        badge.remove();
+      }
+      document.querySelectorAll('a').forEach((el) => {
+        if (el.textContent && el.textContent.includes('Made with Emergent')) {
+          el.remove();
+        }
+      });
+    };
+    removeBadge();
+    const interval = setInterval(removeBadge, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const ProtectedRoute = ({ children }) => {
     return token ? children : <Navigate to="/login" />;
   };
 
-  return (
+    return (
     <div className="App">
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route
+            path="/"
+            element={<LandingPage />}
+          />
           <Route path="/login" element={<LoginPage setToken={setToken} />} />
           <Route path="/signup" element={<SignupPage setToken={setToken} />} />
           <Route path="/quiz" element={<ProtectedRoute><QuizPage /></ProtectedRoute>} />
@@ -42,3 +63,4 @@ function App() {
 }
 
 export default App;
+

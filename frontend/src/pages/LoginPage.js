@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = (process.env.REACT_APP_BACKEND_URL || "https://jan-seva-backend.vercel.app").replace(/\/+$/, "");
 
 const LoginPage = ({ setToken }) => {
   const [email, setEmail] = useState("");
@@ -25,7 +25,7 @@ const LoginPage = ({ setToken }) => {
       
       setToken(response.data.token);
       toast.success("Login successful!");
-      navigate("/quiz");
+      navigate("/");
     } catch (error) {
       toast.error(error.response?.data?.detail || "Login failed");
     } finally {
@@ -116,3 +116,4 @@ const LoginPage = ({ setToken }) => {
 };
 
 export default LoginPage;
+

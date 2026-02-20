@@ -4,8 +4,15 @@ import axios from "axios";
 import { toast } from "sonner";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = (process.env.REACT_APP_BACKEND_URL || "https://jan-seva-backend.vercel.app").replace(/\/+$/, "");
 
 const INDIAN_STATES = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
@@ -134,7 +141,13 @@ const QuizPage = () => {
       
       navigate('/results', { state: response.data });
     } catch (error) {
-      toast.error(error.response?.data?.detail || "Failed to submit quiz");
+      if (error.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem("token");
+        navigate("/login");
+      } else {
+        toast.error(error.response?.data?.detail || "Failed to submit quiz");
+      }
     } finally {
       setLoading(false);
     }
@@ -160,17 +173,24 @@ const QuizPage = () => {
     
     if (q.type === "select") {
       return (
-        <select
-          data-testid={`quiz-${q.id}-select`}
-          value={formData[q.id]}
-          onChange={(e) => setFormData({ ...formData, [q.id]: e.target.value })}
-          className="w-full h-14 rounded-lg border-2 border-slate-300 focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent bg-white text-lg px-4"
+        <Select
+          value={formData[q.id] || ""}
+          onValueChange={(value) => setFormData({ ...formData, [q.id]: value })}
         >
-          <option value="">Select your state</option>
-          {q.options.map(opt => (
-            <option key={opt} value={opt}>{opt}</option>
-          ))}
-        </select>
+          <SelectTrigger
+            data-testid={`quiz-${q.id}-select`}
+            className="w-full h-14 rounded-lg border-2 border-slate-300 focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent bg-white text-lg px-4"
+          >
+            <SelectValue placeholder="Select your state" />
+          </SelectTrigger>
+          <SelectContent>
+            {q.options.map((opt) => (
+              <SelectItem key={opt} value={opt}>
+                {opt}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       );
     }
     

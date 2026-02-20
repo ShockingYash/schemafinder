@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Trash2, ExternalLink, FileText, Award, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = (process.env.REACT_APP_BACKEND_URL || "https://jan-seva-backend.vercel.app").replace(/\/+$/, "");
 
 const SavedPage = () => {
   const navigate = useNavigate();
@@ -51,12 +51,17 @@ const SavedPage = () => {
     <div className="min-h-screen bg-[#fcfbf9]">
       <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-          <div className="flex justify-between items-center h-16">
-            <h2 className="text-2xl font-bold text-[#1e3a8a]" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>Jan-Seva</h2>
+          <div className="py-3 md:py-0 md:h-16 flex flex-col gap-3 md:flex-row md:justify-between md:items-center">
+            <h2
+              className="text-xl leading-tight md:text-2xl font-bold text-[#1e3a8a] cursor-pointer"
+              onClick={() => navigate('/')}
+            >
+              Jan-Seva - A YojanaSetu Platform
+            </h2>
             <button
               data-testid="saved-quiz-btn"
               onClick={() => navigate('/quiz')}
-              className="bg-[#ea580c] hover:bg-[#c2410c] text-white font-medium px-6 py-2 rounded-full transition-all shadow-md hover:shadow-lg"
+              className="bg-[#ea580c] hover:bg-[#c2410c] text-white font-medium px-4 md:px-6 py-2 rounded-full transition-all shadow-md hover:shadow-lg text-sm md:text-base w-fit"
             >
               Take Quiz
             </button>
@@ -190,3 +195,4 @@ const SavedPage = () => {
 };
 
 export default SavedPage;
+
